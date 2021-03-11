@@ -9,6 +9,10 @@ endif
 endif
 
 
+# Use SSE2 optimizations by default
+DEFINES         += -DENABLE_SSE2
+# DEFINES         += -DDISABLE_SIMD
+
 ifeq ($(COMPILER),gcc)
 CCFLAGS		+= -ffast-math
 # CCFLAGS     += -mfpmath=sse

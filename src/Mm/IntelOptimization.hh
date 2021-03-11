@@ -17,10 +17,8 @@
 
 #if (defined(PROC_intel) || defined(PROC_x86_64))
 #include "IntelCodeGenerator.hh"
-#endif
-#if defined(__SSE2__)
 #include "SSE2CodeGenerator.hh"
-#endif
+
 #include "CovarianceFeatureScorerElement.hh"
 #include "GaussDensity.hh"
 #include "MixtureFeatureScorerElement.hh"
@@ -39,18 +37,18 @@ public:
     typedef std::vector<QuantizedType>                          PreparedFeatureVector;
 
 private:
-#if defined(__SSE__)
-#if defined(__SSE2__)
+#if !defined(DISABLE_SIMD)
+#if defined(ENABLE_SSE2)
     SSE2L2NormCodeGenerator l2norm_;
     enum {BlockSize = 16};
 #else
     IntelMMXL2NormCodeGenerator l2norm_;
     IntelMMXResetCodeGenerator  reset_;
     enum {BlockSize = 8};
-#endif  // __SSE2__
+#endif  // ENABLE_SSE2
 #else
     enum { BlockSize = 8 };
-#endif  //__SSE__ 
+#endif  // DISABLE_SIMD
 
 private:
     /** @return is @param vectorSize rounded up to the next integer divisible by BlockSize. */
@@ -73,7 +71,7 @@ public:
     int distanceNoMmx(const PreparedFeatureVector& mean,
                       const PreparedFeatureVector& featureVector) const;
 
-#if !defined(__SSE__)
+#if defined(DISABLE_SIMD)
     int  distance(const PreparedFeatureVector& mean,
                   const PreparedFeatureVector& featureVector) const;
     void resetFloatingPointCalculation() const {}
@@ -86,17 +84,18 @@ public:
                  const PreparedFeatureVector& featureVector) const {
         return l2norm_.run(&mean[0], &featureVector[0]);
     }
-#if defined(__SSE2__)
+#if defined(ENABLE_SSE2)
     void resetFloatingPointCalculation() const {}
 #else
     void resetFloatingPointCalculation() const {
         reset_.run();
     }
-#endif  // __SSE2__
+#endif  // ENABLE_SSE2
 
-#endif  // __SSE__
+#endif  // DISABLE_SIMD
 };
 
 }  // namespace Mm
 
+#endif  // PROC_intel
 #endif  //_MM_INTEL_OPTIMAZATION_HH
