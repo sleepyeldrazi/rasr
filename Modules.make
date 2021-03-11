@@ -55,7 +55,7 @@ MODULES += MODULE_LM_TFRNN
 MODULES += MODULE_MATH_NR
 
 # ****** Mm ******
-MODULES += MODULE_MM_BATCH
+#MODULES += MODULE_MM_BATCH
 MODULES += MODULE_MM_DT
 
 # ****** Neural Network ******

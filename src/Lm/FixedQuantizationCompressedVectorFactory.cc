@@ -13,9 +13,9 @@
  *  limitations under the License.
  */
 #include "FixedQuantizationCompressedVectorFactory.hh"
-
+#if defined(__AVX2__)
 #include <immintrin.h>
-
+#endif
 namespace Lm {
 
 // --------------------------- QuantizedFloatVector ---------------------------

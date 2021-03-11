@@ -13,9 +13,9 @@
  *  limitations under the License.
  */
 #include "QuantizedBlasNceSoftmaxAdapter.hh"
-
+#if defined(__AVX2__)
 #include <immintrin.h>
-
+#endif
 #include "FixedQuantizationCompressedVectorFactory.hh"
 
 float quantized_dot_16bit(size_t size, float scale, s16 const* a, s16 const* b) {
