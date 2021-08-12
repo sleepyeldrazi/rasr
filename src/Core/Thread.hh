@@ -60,6 +60,7 @@ public:
     }
 
 protected:
+#ifndef __ANDROID__
     /**
      * Allow that the thread is cancelled by another thread
      */
@@ -84,7 +85,7 @@ protected:
     void setCancelAsync() {
         pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, 0);
     }
-
+#endif
     /**
      * Terminates the thread
      */

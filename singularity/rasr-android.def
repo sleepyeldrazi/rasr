@@ -1,0 +1,44 @@
+Bootstrap: library
+From: ubuntu:18.04
+Stage: rasr-android
+
+%files
+    extra /opt/extra
+
+
+%post
+    echo "deb http://us.archive.ubuntu.com/ubuntu bionic universe" >> /etc/apt/sources.list
+    apt update -y
+    apt upgrade -y
+
+    apt-get install -yq --no-install-recommends gcc g++ make liblapack-dev python2.7 python2.7-dev python-numpy pkg-config git wget python3 python3-dev libavformat-dev libavcodec-dev libavutil-dev bison libz-dev libxml++2.6-dev libjpeg9-dev libnetpbm10-dev libpng-dev libcppunit-dev libflac-dev libsndfile1-dev locales curl gnupg lzip tar unzip autoconf automake autopoint autogen flex g++-multilib gawk gettext gperf intltool libglib2.0-dev libtool-bin libltdl-dev m4 pkg-config scons openjdk-8-jdk libgc-dev
+
+cd /opt/extra
+mkdir tmp
+./setup-android-sdk.sh
+
+cd /opt/extra
+./android-package.sh libc++
+./android-package.sh zlib
+./android-package.sh liblzma
+./android-package.sh libiconv
+./android-package.sh libxml2
+./android-package.sh libogg
+./android-package.sh libvorbis
+./android-package.sh libflac
+./android-package.sh libsndfile
+./android-package.sh libicu
+./android-package.sh binutils
+./android-package.sh libgmp
+./android-package.sh libmpfr
+./android-package.sh libmpc
+./android-package.sh ndk-sysroot
+./android-package.sh libisl
+
+apt install -y vim
+
+chmod 777 /opt/extra/android/usr/lib/libgfortran.so.5
+chmod 777 /opt/extra/android/usr/lib/liblapack.so
+chmod 777 /opt/extra/android/usr/lib/libopenblas.a
+
+

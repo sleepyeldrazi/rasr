@@ -78,7 +78,7 @@ BINARYFILENAMES		= extended
 #
 # gcc           - GNU Compiler Collection
 # icc		- Intel(R) C / C++ Compiler
-COMPILER                = gcc
+COMPILER                = android
 # COMPILER              = icc
 
 # -----------------------------------------------------------------------------

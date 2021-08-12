@@ -17,10 +17,10 @@
 
 #include <functional>
 #include <vector>
-
+#if defined(__SSE3__)
 #include <emmintrin.h>
 #include <tmmintrin.h>
-
+#endif
 #include "Assertions.hh"
 
 namespace Core {

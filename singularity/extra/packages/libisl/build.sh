@@ -1,0 +1,10 @@
+PKG_HOMEPAGE=http://isl.gforge.inria.fr/
+PKG_DESCRIPTION="Library for manipulating sets and relations of integer points bounded by linear constraints"
+PKG_LICENSE="MIT"
+PKG_MAINTAINER="@termux"
+PKG_VERSION=0.24
+PKG_SRCURL=http://isl.gforge.inria.fr/isl-${PKG_VERSION}.tar.xz
+PKG_SHA256=043105cc544f416b48736fff8caf077fb0663a717d06b1113f16e391ac99ebad
+PKG_DEPENDS="libgmp"
+PKG_BREAKS="libisl-dev"
+PKG_REPLACES="libisl-dev"

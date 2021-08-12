@@ -77,7 +77,7 @@ public:
             std::cout << " time: " << totalTime_ << std::endl;
         totalTime_ = 0;
     }
-
+#ifndef __ANDROID__
     static inline u64 instructions() {
         unsigned int a, d;
         asm __volatile__(""
@@ -88,7 +88,7 @@ public:
                      : "=a"(a), "=d"(d));
         return ((u64)a) | (((u64)d) << 32);
     }
-
+#endif
 private:
     bool                   running_;
     timeval                starttime_;
