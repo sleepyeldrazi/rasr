@@ -6,7 +6,7 @@
 
 COMPILE_MODES		= standard release debug debug_light debug_dynamic
 PROFILE_MODES		= none gprof valgrind
-COMPILERS               = gcc icc clang
+COMPILERS               = gcc icc clang android
 
 include $(TOPDIR)/Options.make
 include $(TOPDIR)/Modules.make
@@ -37,6 +37,11 @@ OS   = $(shell uname -s)
 CPU  = $(shell test -e /proc/cpuinfo && cat /proc/cpuinfo | grep "model name" | head -n 1)
 ifeq ($(CPU),)
 CPU = unknown
+endif
+
+ifeq ($(COMPILER),android)
+OS              = android
+PROC            = aarch64
 endif
 
 OS_LIST		= linux darwin
