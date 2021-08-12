@@ -107,7 +107,7 @@ bool isnan(T val);
 // Apple seem to correctly handle -ffastmath enabled/disabled,
 // if I understand their header correctly.
 // Also, __isnan is non-standard.
-#ifdef __APPLE__
+#if defined __APPLE__ || defined __ANDROID__
 template<>
 inline bool isnan<float>(float val) {
     return std::isnan(val);

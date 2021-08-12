@@ -1,0 +1,12 @@
+PKG_HOMEPAGE=http://www.mega-nerd.com/libsndfile
+PKG_DESCRIPTION="Library for reading/writing audio files"
+PKG_LICENSE="LGPL-2.0"
+PKG_MAINTAINER="@termux"
+PKG_VERSION=1.0.31
+PKG_SRCURL=https://github.com/erikd/libsndfile/releases/download/${PKG_VERSION}/libsndfile-${PKG_VERSION}.tar.bz2
+PKG_SHA256=a8cfb1c09ea6e90eff4ca87322d4168cdbe5035cb48717b40bf77e751cc02163
+PKG_DEPENDS="libflac, libvorbis"
+PKG_BREAKS="libsndfile-dev"
+PKG_REPLACES="libsndfile-dev"
+PKG_EXTRA_CONFIGURE_ARGS="--disable-sqlite --disable-alsa"
+PKG_RM_AFTER_INSTALL="bin/ share/man/man1/"

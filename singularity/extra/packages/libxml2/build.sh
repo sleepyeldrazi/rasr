@@ -1,0 +1,12 @@
+PKG_HOMEPAGE=http://www.xmlsoft.org
+PKG_DESCRIPTION="Library for parsing XML documents"
+PKG_LICENSE="MIT"
+PKG_MAINTAINER="@termux"
+PKG_VERSION=2.9.12
+PKG_SRCURL=ftp://xmlsoft.org/libxml2/libxml2-${PKG_VERSION}.tar.gz
+PKG_SHA256=c8d6681e38c56f172892c85ddc0852e1fd4b53b4209e7f4ebf17f7e2eae71d92
+PKG_EXTRA_CONFIGURE_ARGS="--without-python"
+PKG_RM_AFTER_INSTALL="share/gtk-doc"
+PKG_DEPENDS="libiconv, liblzma, zlib"
+PKG_BREAKS="libxml2-dev"
+PKG_REPLACES="libxml2-dev"

@@ -1,0 +1,9 @@
+PKG_HOMEPAGE=https://xiph.org/ogg/
+PKG_DESCRIPTION="Library for working with the Ogg multimedia container format"
+PKG_LICENSE="BSD 3-Clause"
+PKG_MAINTAINER="@termux"
+PKG_VERSION=1.3.5
+PKG_SRCURL=https://github.com/xiph/ogg/releases/download/v${PKG_VERSION}/libogg-${PKG_VERSION}.tar.xz
+PKG_SHA256=c4d91be36fc8e54deae7575241e03f4211eb102afb3fc0775fbbc1b740016705
+PKG_BREAKS="libogg-dev"
+PKG_REPLACES="libogg-dev"

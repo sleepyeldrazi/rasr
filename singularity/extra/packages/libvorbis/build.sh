@@ -1,0 +1,10 @@
+PKG_HOMEPAGE=https://xiph.org/vorbis/
+PKG_DESCRIPTION="Library for using the Ogg Vorbis compressed audio format"
+PKG_LICENSE="BSD 3-Clause"
+PKG_MAINTAINER="@termux"
+PKG_VERSION=1.3.7
+PKG_SRCURL=http://downloads.xiph.org/releases/vorbis/libvorbis-${PKG_VERSION}.tar.xz
+PKG_SHA256=b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f72954b
+PKG_DEPENDS="libogg"
+PKG_BREAKS="libvorbis-dev"
+PKG_REPLACES="libvorbis-dev"

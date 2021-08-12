@@ -1,0 +1,10 @@
+PKG_HOMEPAGE=http://www.multiprecision.org/
+PKG_DESCRIPTION="Library for the arithmetic of complex numbers with arbitrarily high precision"
+PKG_LICENSE="LGPL-2.0"
+PKG_MAINTAINER="@termux"
+PKG_VERSION=1.2.1
+PKG_SRCURL=https://mirrors.kernel.org/gnu/mpc/mpc-$PKG_VERSION.tar.gz
+PKG_SHA256=17503d2c395dfcf106b622dc142683c1199431d095367c6aacba6eec30340459
+PKG_DEPENDS="libgmp, libmpfr"
+PKG_BREAKS="libmpc-dev"
+PKG_REPLACES="libmpc-dev"

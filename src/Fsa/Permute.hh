@@ -300,8 +300,12 @@ public:
         u32     upperLimit = std::min(size_t(Precursor::states_[s].depth_ + Precursor::windowSize_), Precursor::states_[s].used_.size());
         Precursor::processing_->processState(Precursor::states_[s].used_, lowerLimit, upperLimit);
         for (u32 i = lowerLimit; i < upperLimit; ++i)
-            if (!Precursor::states_[s].used_[i] && (size_t(abs(i - Precursor::states_[s].depth_)) < Precursor::distortionLimit_)) {  // !!! LIMIT
-                u32  depth = Precursor::states_[s].depth_ + 1;
+#ifndef __ANDROID__
+	    if (!Precursor::states_[s].used_[i] && (size_t(abs(i - Precursor::states_[s].depth_)) < Precursor::distortionLimit_)) {  // !!! LIMIT
+#else
+	    if (!Precursor::states_[s].used_[i] && (size_t(abs(int(i - Precursor::states_[s].depth_)) < Precursor::distortionLimit_))) {  // !!! LIMIT
+#endif
+		u32  depth = Precursor::states_[s].depth_ + 1;
                 Arc* a     = sp->newArc();
                 *a         = Precursor::arcs_[i];
                 a->target_ = Precursor::insertState(depth, Precursor::states_[s].used_, i);
@@ -359,16 +363,25 @@ public:
         Precursor::processing_->processState(Precursor::states_[s].used_, firstBitNotSet,
                                              (Precursor::states_[s].depth_ - firstBitNotSet < Precursor::windowSize_) ? Precursor::states_[s].used_.size() : firstBitNotSet + 1);
         // monotone transition
-        if (size_t(abs(firstBitNotSet - Precursor::states_[s].depth_)) < Precursor::distortionLimit_) {
-            Arc* a     = sp->newArc();
+#ifndef __ANDROID__
+	if (size_t(abs(firstBitNotSet - Precursor::states_[s].depth_)) < Precursor::distortionLimit_) {
+#else
+	if (size_t(abs(int(firstBitNotSet - Precursor::states_[s].depth_)) < Precursor::distortionLimit_)) {
+#endif
+	    Arc* a     = sp->newArc();
             *a         = Precursor::arcs_[firstBitNotSet];
             a->target_ = Precursor::insertState(Precursor::states_[s].depth_ + 1, Precursor::states_[s].used_, firstBitNotSet);
             Precursor::processing_->processArc(firstBitNotSet - Precursor::states_[s].depth_, a);
         }
-        if (Precursor::states_[s].depth_ - firstBitNotSet < Precursor::windowSize_) {  // if we can do non-monotone transitions
+
+	if (Precursor::states_[s].depth_ - firstBitNotSet < Precursor::windowSize_) {  // if we can do non-monotone transitions
             for (u32 i = firstBitNotSet + 1; i < Precursor::states_[s].used_.size(); i++) {
-                if (!Precursor::states_[s].used_[i] && (size_t(abs(i - Precursor::states_[s].depth_)) < Precursor::distortionLimit_)) {  // DISTORTION LIMIT HERE !
-                    Arc* a     = sp->newArc();
+#ifndef __ANDROID__
+		if (!Precursor::states_[s].used_[i] && (size_t(abs(i - Precursor::states_[s].depth_)) < Precursor::distortionLimit_)) {  // DISTORTION LIMIT HERE !
+#else
+		if (!Precursor::states_[s].used_[i] && (size_t(abs(int(i - Precursor::states_[s].depth_)) < Precursor::distortionLimit_))) {  // DISTORTION LIMIT HERE !
+#endif
+		    Arc* a     = sp->newArc();
                     *a         = Precursor::arcs_[i];
                     a->target_ = Precursor::insertState(Precursor::states_[s].depth_ + 1, Precursor::states_[s].used_, i);
                     Precursor::processing_->processArc(i - Precursor::states_[s].depth_, a);
