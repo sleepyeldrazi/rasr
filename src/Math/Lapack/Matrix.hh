@@ -19,7 +19,7 @@
 
 namespace Math {
 namespace Lapack {
-
+#ifndef __ANDROID__
 /** Base class for matrix storage schemes in 1-D buffer */
 
 class MatrixStorageScheme {
@@ -184,6 +184,8 @@ void copy(const Matrix<T>& source, Target& target, size_t nColumns) {
         }
     }
 }
+
+#endif // __ANDROID__
 
 }  // namespace Lapack
 }  // namespace Math

@@ -15,6 +15,7 @@
 #ifndef _SIGNAL_LSE_HH
 #define _SIGNAL_LSE_HH
 
+#include <Core/Assertions.hh>
 #include <Core/Types.hh>
 #include <Math/Lapack/Lapack.hh>
 #include <vector>
@@ -196,9 +197,11 @@ bool QrLeastSquares<T>::work(T* estimation_error, std::vector<T>* theta) {
     int  nrhs  = 1;
     int  lwork = this->lwork_;
     int  info;
-
+#ifndef __ANDROID__
     Math::Lapack::gels(&trans, &m, &n, &nrhs, this->X_, &m, this->y_, &m, this->work_, &lwork, &info);
-
+#else
+    defect();
+#endif
     if (info != 0)
         return false;
 
@@ -227,8 +230,11 @@ bool QrLeastSquares<T>::queryWorkspaceSize(u32& size) {
     int  lwork = -1;
     T    w;
     int  info;
-
+#ifndef __ANDROID__
     Math::Lapack::gels(&trans, &m, &n, &nrhs, this->X_, &m, this->y_, &m, &w, &lwork, &info);
+#else
+    defect();
+#endif
 
     return ((info == 0) && ((size = (u32)w) != 0.0));
 }

@@ -83,6 +83,8 @@ void F77NAME(dgetri)(int* n, double* A, int* lda, int* ipiv,
 namespace Math {
 namespace Lapack {
 
+#ifndef __ANDROID__
+
 // Type dependend Lapack definitions:
 
 void dgelsd(s32* m, s32* n, s32* nrhs, f64* a, s32* lda, f64* b, s32* ldb,
@@ -205,5 +207,6 @@ void getri(int* n, double* A, int* lda, int* ipiv,
     F77NAME(dgetri)
     (n, A, lda, ipiv, work, lwork, info);
 }
+#endif // __ANDROID__
 }  // namespace Lapack
 }  // namespace Math

@@ -16,7 +16,7 @@ CPPFLAGS        += -I$(TOOLCHAIN)/sysroot/usr/include/c++/v1
 CPPFLAGS        += -I$(TOOLCHAIN)/sysroot/usr/local/include
 CPPFLAGS        += -I$(TOOLCHAIN)/lib64/clang/9.0.9/include
 CPPFLAGS        += -I$(TOOLCHAIN)/sysroot/usr/include/aarch64-linux-android
-CPPFLAGS        += -I/home/sleepy/Documents/androidRASR/buildscript/android/usr/include
+CPPFLAGS        += -I/opt/extra/android/usr/include
 CPPFLAGS        += -I/home/sleepy/Documents/androidRASR/deps/blas/output_new/arm64-v8a/include
 
 CCFLAGS		= 		# common for C and C++

@@ -35,11 +35,15 @@ bool DiagCovMonoGaussianModel::finalize() {
     squareVec.squareVector(mean_);
     variance_ -= squareVec;
     Math::Matrix<f64> invTest = Math::makeDiagonalMatrix(variance_);
+#ifndef __ANDROID__
     while (!Math::Lapack::invert(invTest, false)) {
         variance_ += Math::Vector<f64>(invTest.nRows(), 0.1);
         invTest = Math::makeDiagonalMatrix(variance_);
         Core::Application::us()->log() << "variance was singular, adding diagonal 0.1";
     }
+#else
+    defect();
+#endif
     return (0);
 }
 
@@ -68,11 +72,15 @@ bool FullCovMonoGaussianModel::finalize() {
     squareVec.squareVector(mean_);
     variance_ -= squareVec;
     Math::Matrix<f64> invTest = variance_;
+#ifndef __ANDROID__
     while (!Math::Lapack::invert(invTest, false)) {
         variance_ += Math::makeDiagonalMatrix<f64>(invTest.nRows(), 0.1);
         invTest = variance_;
         Core::Application::us()->log() << "variance matrix was singular, adding diagonal 0.1";
     }
+#else
+    defect();
+#endif
     return (0);
 }
 
@@ -103,15 +111,21 @@ void FullCovMonoGaussianModel::mergeVariance(const FullCovMonoGaussianModel& x, 
 }
 
 void FullCovMonoGaussianModel::computeL() {
+#ifndef __ANDROID__
     likelihood_ = Math::Lapack::logDeterminant(variance_);
     likelihood_ *= nFrames_;
+#else
+    defect();
+#endif
 }
 
 const f32 FullCovMonoGaussianModel::relativeLikelihood(const FullCovMonoGaussianModel& x) const {
     /* p(this|x) */
+
     f64               likelihood = 0.0F;
     Math::Vector<f64> tmpvec(mean_ - x.mean_);
     Math::Matrix<f64> invmat(x.variance_);
+#ifndef __ANDROID__
     if (!Math::Lapack::invert(invmat))
         return Core::Type<f32>::max;  // failure
 
@@ -125,6 +139,9 @@ const f32 FullCovMonoGaussianModel::relativeLikelihood(const FullCovMonoGaussian
     likelihood -= dim() * LN_2PI;
     likelihood *= 0.5F;
     likelihood *= nFrames_;
+#else
+    defect();
+#endif
     return (f32(likelihood));
 }
 
@@ -151,10 +168,14 @@ void BICFullCovMonoGaussianModel::mergeModels(const BICFullCovMonoGaussianModel&
 
 // ------------------------------------------------------------------------
 void KL2FullCovMonoGaussianModel::computeKL2(const KL2FullCovMonoGaussianModel& x, const KL2FullCovMonoGaussianModel& y) {
+#ifndef __ANDROID__
     kl2_  = Core::Type<f32>::max;
     f32 a = x.relativeLikelihood(x), b = y.relativeLikelihood(y), c = x.relativeLikelihood(y), d = y.relativeLikelihood(x);
     if (a != Core::Type<f32>::max && b != Core::Type<f32>::max && c != Core::Type<f32>::max && d != Core::Type<f32>::max)
         kl2_ = a + b - c - d;
+#else
+    defect();
+#endif
 }
 
 void KL2FullCovMonoGaussianModel::mergeModels(const KL2FullCovMonoGaussianModel& x, const KL2FullCovMonoGaussianModel& y) {
@@ -177,9 +198,13 @@ void CorrFullCovMonoGaussianModel::relativeFeatureNormalize(f32 weight) {
 void CorrFullCovMonoGaussianModel::refresh() {
     if (refresh_) {
         relativeFeature_.resize(models_->size(), f32());
-        for (u32 i = 0; i < models_->size(); i++)
+#ifndef __ANDROID__
+	for (u32 i = 0; i < models_->size(); i++)
             relativeFeature_[i] = relativeLikelihood((*models_)[i]);
-        relativeFeatureNormalize(alpha_);
+#else
+	defect();
+#endif
+	relativeFeatureNormalize(alpha_);
         refresh_ = 0;
     }
 }

@@ -18,6 +18,9 @@ mkdir tmp
 ./setup-android-sdk.sh
 
 cd /opt/extra
+./compand_new.sh
+
+cd /opt/extra
 ./android-package.sh libc++
 ./android-package.sh zlib
 ./android-package.sh liblzma
@@ -28,17 +31,20 @@ cd /opt/extra
 ./android-package.sh libflac
 ./android-package.sh libsndfile
 ./android-package.sh libicu
-./android-package.sh binutils
-./android-package.sh libgmp
-./android-package.sh libmpfr
-./android-package.sh libmpc
-./android-package.sh ndk-sysroot
-./android-package.sh libisl
 
-apt install -y vim
+#./android-package.sh binutils
+#./android-package.sh libgmp
+#./android-package.sh libmpfr
+#./android-package.sh libmpc
+#./android-package.sh ndk-sysroot
+#./android-package.sh libisl
 
-chmod 777 /opt/extra/android/usr/lib/libgfortran.so.5
-chmod 777 /opt/extra/android/usr/lib/liblapack.so
+cp /opt/extra/output_new/arm64-v8a/lib/libopenblas.a /opt/extra/android/usr/lib/libopenblas.a
+
+#apt install -y vim
+
+#chmod 777 /opt/extra/android/usr/lib/libgfortran.so.5
+#chmod 777 /opt/extra/android/usr/lib/liblapack.so
 chmod 777 /opt/extra/android/usr/lib/libopenblas.a
 
 

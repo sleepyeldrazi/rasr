@@ -22,6 +22,8 @@
 namespace Math {
 namespace Lapack {
 
+#ifndef __ANDROID__
+
 /** Vector is simple wrapper for a 1-D buffer */
 template<class T>
 class Vector {
@@ -118,6 +120,8 @@ T maxAbsoluteElement(const Vector<T>& v) {
     Core::maxAbsoluteElement(v.begin(), v.end(), m);
     return m;
 }
+
+#endif // __ANDROID__
 
 }  // namespace Lapack
 }  // namespace Math

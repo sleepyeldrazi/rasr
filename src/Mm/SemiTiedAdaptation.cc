@@ -200,8 +200,12 @@ void SemiTiedEstimator::solveEstimationEquations(const IdSet&                idS
     Matrix               U = w_[qId], V(dimension_);
     Math::Vector<double> wInit(dimension_, 0.0);
 
+#ifndef __ANDROID__
     //get initial values;
     svd(U, wInit, V, w_[qId]);
+#else
+    defect();
+#endif
 
 #ifndef __lambda_only__
     for (IdSetConstIterator c = idSet.begin(); c != idSet.end(); ++c) {

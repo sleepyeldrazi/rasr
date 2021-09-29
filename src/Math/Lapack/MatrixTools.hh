@@ -24,6 +24,8 @@
 namespace Math {
 namespace Lapack {
 
+#ifndef __ANDROID__
+
 // If critical is true, produces a critical error on failure. Otherwise just produces a warning
 // and returns false.
 template<typename T, class P>
@@ -186,6 +188,8 @@ T determinant(const Math::Matrix<T, P>& mat, bool critical = true) {
 
     return d;
 }
+
+#endif // __ANDROID__
 }  // namespace Lapack
 }  // namespace Math
 

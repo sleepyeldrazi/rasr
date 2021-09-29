@@ -18,6 +18,8 @@
 namespace Math {
 namespace Lapack {
 
+#ifndef __ANDROID__
+
 s32 pseudoInvert(DoubleMatrix& result, const DoubleMatrix& A) {
     require(A.nRows() == A.nColumns());  //other cases possible but not implemeted yet
     if (result.nRows() != A.nRows() || result.nColumns() != A.nColumns())
@@ -164,6 +166,8 @@ s32 svd(DoubleMatrix& U, DoubleVector& W, DoubleMatrix& V, const DoubleMatrix& A
     delete[] iwork;
     return info;
 }
+
+#endif // __ANDROID__
 
 }  // namespace Lapack
 }  // namespace Math

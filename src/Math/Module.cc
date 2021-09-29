@@ -50,7 +50,9 @@ Core::FormatSet& Module_::formats() {
     return *formats_;
 }
 
+
 EigenvalueProblem* Module_::createEigenvalueProblem(const Core::Configuration& configuration) const {
+#ifndef __ANDROID__
     EigenvalueProblem* result = 0;
     switch ((EigenvalueProblem::Type)EigenvalueProblem::paramType(configuration)) {
         case EigenvalueProblem::typeSymmetric:
@@ -75,4 +77,7 @@ GeneralizedEigenvalueProblem* Module_::createGeneralizedEigenvalueProblem(const 
             Core::Application::us()->error("This type of generalized eigenvalue problem is not implemented yet.");
     }
     return result;
+#else
+    defect();
+#endif
 }

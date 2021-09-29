@@ -5,8 +5,10 @@ TOPDIR		= ../..
 include $(TOPDIR)/Makefile.cfg
 
 # -----------------------------------------------------------------------------
-
+ifndef __ANDROID__
 SUBDIRS 	= Lapack
+endif
+
 TARGETS		= libSprintMath.$(a) check$(exe) profile$(exe)
 
 LIBMATH_O	= \
@@ -55,8 +57,11 @@ all: $(TARGETS)
 
 Nr:
 	$(MAKE) -C $@ libSprintMathNr.$(a)
+
+ifndef __ANDROID__
 Lapack:
 	$(MAKE) -C $@ libSprintMathLapack.$(a)
+endif
 
 ifdef MODULE_CUDA
 $(OBJDIR)/CudaMatrixKernels.o: CudaMatrixKernels.cu

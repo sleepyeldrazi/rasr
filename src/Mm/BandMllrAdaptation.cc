@@ -17,7 +17,7 @@
 #include "MixtureSet.hh"
 
 using namespace Mm;
-//using namespace Math::Lapack;
+using namespace Math::Lapack;
 
 const Core::ParameterInt BandMllrEstimator::paramNBands_(
         "mllr-bands",
@@ -102,7 +102,11 @@ Math::Vector<Matrix::Type> BandMllrEstimator::solveRowEquation(
     B[0][0] = g[0][0];
 
     Matrix BInverse(B);
+#ifndef __ANDROID__
     Math::Lapack::pseudoInvert(BInverse);
+#else
+    defect();
+#endif
     x = BInverse * c;
     for (u16 row = 1; row < nRows + 1; ++row) {
         if (row + offset > 0 && u16(row + offset) < dimension_ + 1) {
@@ -112,6 +116,7 @@ Math::Vector<Matrix::Type> BandMllrEstimator::solveRowEquation(
     result[0] = x[0];
     return result;
 }
+
 
 bool BandMllrEstimator::write(Core::BinaryOutputStream& o) const {
     if (Precursor::write(o)) {

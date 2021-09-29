@@ -28,7 +28,9 @@ FLF_TOOL_O += $(subst src,../..,$(LIBS_SEARCH))
 FLF_TOOL_O += ../../Signal/libSprintSignal.$(a)
 FLF_TOOL_O += ../../Flow/libSprintFlow.$(a)
 FLF_TOOL_O += ../../Math/libSprintMath.$(a)
+ifndef __ANDROID__
 FLF_TOOL_O += ../../Math/Lapack/libSprintMathLapack.$(a)
+endif
 
 ifdef MODULE_CART
 FLF_TOOL_O += ../../Cart/libSprintCart.$(a)

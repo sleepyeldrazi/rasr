@@ -17,6 +17,7 @@
 
 using namespace Math::Lapack;
 
+#ifndef __ANDROID__
 //--------------------------------------------------------------------------------------------------------
 const Core::ParameterFloat EigenvalueProblem::paramEigenvalueLowerBound(
         "eigenvalue-lower-bound",
@@ -730,3 +731,4 @@ bool GenSymmetricDefiniteEigenProblem::dsygvd(Matrix<double>& a,
     }
     return true;
 }
+#endif // __ANDROID__

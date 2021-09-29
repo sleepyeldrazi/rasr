@@ -21,6 +21,8 @@
 namespace Math {
 namespace Lapack {
 
+#ifndef __ANDROID__
+
 /**
  *  Helper class for LAPACK eigenvalue problems.
  */
@@ -304,6 +306,7 @@ public:
                Math::Vector<ValueType>& eigenvalues, Math::Matrix<ValueType>& eigenvectors);
 };
 
+#endif // __ANDROID__
 }  // namespace Lapack
 }  // namespace Math
 

@@ -136,7 +136,7 @@ LDFLAGS     += -lm
 endif
 
 ifdef MODULE_PYTHON
-INCLUDES    += `python2.7-config --includes 2>/dev/null || pkg-config --cflags python`
+#INCLUDES    += `python2.7-config --includes 2>/dev/null || pkg-config --cflags python`
 LDFLAGS     += `python2.7-config --libs 2>/dev/null || pkg-config --libs python`
 endif
 
@@ -149,7 +149,7 @@ MOC         = moc
 XLDFLAGS    = $(X11_LIB) -lXpm -lXext -lX11
 
 
-LDFLAGS         += -L/opt/extra/android/usr/lib -l:libopenblas.a -l:libgfortran.so.5 -lc -l:libsndfile.a -l:libz.a -l:libxml2.a -l:liblzma.a -l:libicui18n.a -l:libicuuc.a -l:libicudata.a -lm -ldl -liconv -l:libicuio.a -l:libFLAC.a -l:libvorbis.a -l:libvorbisenc.a -l:libogg.a
+LDFLAGS         += -L/opt/extra/android/usr/lib -l:libopenblas.a -lc -l:libsndfile.a -l:libz.a -l:libxml2.a -l:liblzma.a -l:libicui18n.a -l:libicuuc.a -l:libicudata.a -lm -ldl -liconv -l:libicuio.a -l:libFLAC.a -l:libvorbis.a -l:libvorbisenc.a -l:libogg.a
 # -----------------------------------------------------------------------------
 MAKE        = make
 MAKEDEPEND  = makedepend -v -D__GNUC__=3 -D__GNUC_MINOR__=3

@@ -21,6 +21,8 @@
 namespace Math {
 namespace Lapack {
 
+#ifndef __ANDROID__
+
 typedef Math::Matrix<double> DoubleMatrix;
 typedef Math::Vector<double> DoubleVector;
 
@@ -31,6 +33,8 @@ s32 pseudoInvert(DoubleMatrix& result, const DoubleMatrix& A);
 s32 solveLinearLeastSquares(DoubleVector& result, const DoubleMatrix& A, const DoubleVector& b);
 s32 solveLinearLeastSquares(DoubleMatrix& result, const DoubleMatrix& A, const DoubleMatrix& B);
 s32 svd(DoubleMatrix& U, DoubleVector& W, DoubleMatrix& V, const DoubleMatrix& A);  //returns V, not(!) VT
+
+#endif // __ANDROID__
 
 }  // namespace Lapack
 }  // namespace Math

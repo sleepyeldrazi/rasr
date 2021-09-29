@@ -587,12 +587,16 @@ public:
         // first compute the relative likelihoods of the models
         Core::WithProgressIndicator progressIndicator("computing relative likelihood features");
         progressIndicator.start(models.size());
-        for (u32 i = 0; i < models.size(); i++) {
+#ifndef __ANDROID__
+	for (u32 i = 0; i < models.size(); i++) {
             for (u32 j = 0; j < models.size(); j++) {
                 relativeFeature[i][j] = models[i].relativeLikelihood(models[j]);
             }
             progressIndicator.notify(i);
         }
+#else
+	defect();
+#endif
         progressIndicator.finish(false);
     }
 

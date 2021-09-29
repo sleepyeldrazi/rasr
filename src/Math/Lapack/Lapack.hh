@@ -20,7 +20,7 @@
 
 namespace Math {
 namespace Lapack {
-
+#ifndef __ANDROID__
 void dgelsd(s32* m, s32* n, s32* nrhs, f64* a, s32* lda, f64* b, s32* ldb,
             f64* s, f64* rcond, s32* rank, f64* work, s32* lwork, s32* iwork, s32* info);
 
@@ -144,6 +144,7 @@ void getri(int* n, float* A, int* lda, int* ipiv,
 
 void getri(int* n, double* A, int* lda, int* ipiv,
            double* work, int* lwork, int* info);
+#endif // __ANDROID__
 
 }  // namespace Lapack
 }  // namespace Math
