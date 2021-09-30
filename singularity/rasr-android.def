@@ -18,7 +18,7 @@ mkdir tmp
 ./setup-android-sdk.sh
 
 cd /opt/extra
-./compand_new.sh
+./openblas.sh
 
 cd /opt/extra
 ./android-package.sh libc++
