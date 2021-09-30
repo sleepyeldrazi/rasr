@@ -121,7 +121,6 @@ void FullCovMonoGaussianModel::computeL() {
 
 const f32 FullCovMonoGaussianModel::relativeLikelihood(const FullCovMonoGaussianModel& x) const {
     /* p(this|x) */
-
     f64               likelihood = 0.0F;
     Math::Vector<f64> tmpvec(mean_ - x.mean_);
     Math::Matrix<f64> invmat(x.variance_);

@@ -37,11 +37,9 @@ public:
     typedef Flow::DataPtr<Data> DataPointer;
 
 private:
-#ifndef __ANDROID__
     Math::Lapack::Matrix<f64> A_;
     Math::Lapack::Matrix<f64> B_;
     Math::Lapack::Vector<int> pivotIndices_;
-#endif
 
     std::string lastError_;
 

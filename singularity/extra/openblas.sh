@@ -81,15 +81,10 @@ function download_extract_unzip {
 
 ANDROID_API=24
 TARGET_ARRS=( "arm64-v8a" )
-#TARGET_ARRS=( "armv7a" "arm64-v8a" "x86" "x86_64" )
-#OPENBLAS_TARGETS=( "ARMV7" "ARMV8" "ATOM" "ATOM" )
-#COMPILER_PREFIXES=( "armv7a-linux-androideabi" "aarch64-linux-android" "i686-linux-android" "x86_64-linux-android" )
-#TOOLCHAIN_PREFIXES=( "arm-linux-androideabi" "aarch64-linux-android" "i686-linux-android" "x86_64-linux-android" )
 OPENBLAS_TARGETS=("ARMV8")
 COMPILER_PREFIXES=( "aarch64-linux-android" )
 TOOLCHAIN_PREFIXES=( "aarch64-linux-android" )
 XTRA_FLAGS=(" BINARY=64" )
-#XTRA_FLAGS=( "ARM_SOFTFP_ABI=1" " BINARY=64 CFLAGS=-static" "" " BINARY=64" )
 NDK_URL="https://dl.google.com/android/repository/android-ndk-r21d-linux-x86_64.zip"
 NDK_DIR="${BASE_DIR}/compile_tools/"
 OPENBLAS_GIT_URL="https://github.com/xianyi/OpenBLAS.git"
@@ -99,14 +94,6 @@ mkdir -p ${BASE_DIR}
 mkdir -p ${BASE_DIR}/output_new
 #change directory to base
 cd $BASE_DIR
-
-#if [ ! -d ${NDK_DIR}/folder ]; then
-#    #out file
-#    message "download NDK"
-#    download_extract_unzip ${NDK_URL} ${NDK_DIR}
-#    message "rename top folder"
-#    rename_top_folder ${NDK_DIR}
-#fi
 
 NDK_DIR="/opt/extra/android/build-tools/android-ndk"
 ANDROID_TOOLCHAIN=${NDK_DIR}/toolchains/llvm/prebuilt/linux-x86_64

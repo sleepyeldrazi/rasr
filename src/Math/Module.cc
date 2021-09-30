@@ -50,7 +50,6 @@ Core::FormatSet& Module_::formats() {
     return *formats_;
 }
 
-
 EigenvalueProblem* Module_::createEigenvalueProblem(const Core::Configuration& configuration) const {
 #ifndef __ANDROID__
     EigenvalueProblem* result = 0;

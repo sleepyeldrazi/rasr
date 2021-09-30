@@ -219,12 +219,9 @@ Math::Matrix<FeatureType> AffineFeatureTransformAccumulator::estimate(int       
     }
 
     GMatrixAccumulator gInverse(gAccumulator_);
-#ifndef __ANDROID__
+
     for (u32 i = 0; i < targetDimension; i++)
         Math::Lapack::invert(gInverse[i]);
-#else
-    defect();
-#endif
 
     if (criterion == naive) {
         for (u32 i = 0; i < targetDimension; i++)
@@ -258,12 +255,9 @@ Math::Matrix<FeatureType> AffineFeatureTransformAccumulator::estimate(int       
                 pseudoInverse = transformedCovariance;
             else
                 pseudoInverse = linearTransform;
-#ifndef __ANDROID__
+
             Math::Lapack::invert(pseudoInverse);
-#else
-	    defect();
-#endif
-	    Math::Vector<Sum> cofactors;
+            Math::Vector<Sum> cofactors;
 
             if (targetDimension < featureDimension_)
                 cofactors = halfCovarianceTransposed.transpose() * pseudoInverse.column(row);
@@ -329,7 +323,7 @@ Sum AffineFeatureTransformAccumulator::score(Transform& transform, Criterion cri
     linearTransform.removeColumn(0);
 
     Sum jacobian = 0;
-#ifndef __ANDROID__
+
     if (criterion == naive)
         jacobian = 0;
     else if (criterion == mmiPrime)
@@ -338,9 +332,6 @@ Sum AffineFeatureTransformAccumulator::score(Transform& transform, Criterion cri
         defect();  //Not implemented yet;
     else
         defect();
-#else
-    defect();
-#endif
 
     Sum distance = 0;
     for (u32 i = 0; i < modelDimension_; i++) {

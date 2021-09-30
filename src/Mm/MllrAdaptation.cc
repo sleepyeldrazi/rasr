@@ -681,11 +681,7 @@ void FullAdaptorViterbiEstimator::estimateWMatrices() {
         count_[id] = g[id].count();
         if (count_[id] > minAdaptationObservations_) {
             Matrix gInverse(g[id].matrix());
-#ifndef __ANDROID__
-	    pseudoInvert(gInverse);
-#else
-	    defect();
-#endif
+            pseudoInvert(gInverse);
             w_[id] = z[id].matrix() * gInverse;
         }
         else {
@@ -794,12 +790,8 @@ Core::Ref<Adaptor> FullAdaptorViterbiEstimator::adaptor(void) {
         Core::BinaryTree::Id silenceLeaf = (*leafIndex_)[*p];
         if (leafGAccumulators_[silenceLeaf].count() > minSilenceObservations_) {
             Matrix gInverse(leafGAccumulators_[silenceLeaf].matrix());
-#ifndef __ANDROID__
-	    pseudoInvert(gInverse);
-#else
-	    defect();
-#endif
-	    adaptationMatrices[silenceId] = leafZAccumulators_[silenceLeaf].matrix() * gInverse;
+            pseudoInvert(gInverse);
+            adaptationMatrices[silenceId] = leafZAccumulators_[silenceLeaf].matrix() * gInverse;
         }
         else {
             log("too few observations for silence adaptation\n")
