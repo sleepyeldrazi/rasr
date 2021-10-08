@@ -5,6 +5,12 @@ Stage: rasr-android
 %files
     extra /opt/extra
 
+%environment
+export NDK="/opt/extra/android/build-tools/android-ndk"
+export TOOLCHAIN="$NDK/toolchains/llvm/prebuilt/linux-x86_64"
+export API="24"
+export TARGET=aarch64-linux-android
+export _JAVA_AWT_WM_NONREPARENTING=1
 
 %post
     echo "deb http://us.archive.ubuntu.com/ubuntu bionic universe" >> /etc/apt/sources.list

@@ -20,13 +20,17 @@
 #     for an example
 
 # ****** Adaptation ******
+ifneq ($(COMPILER),android)
 MODULES += MODULE_ADAPT_CMLLR
 MODULES += MODULE_ADAPT_MLLR
 MODULES += MODULE_ADAPT_ADVANCED
+endif
 
 # ****** Audio ******
+ifneq ($(COMPILER),android)
 MODULES += MODULE_AUDIO_FFMPEG
 MODULES += MODULE_AUDIO_FLAC
+endif
 MODULES += MODULE_AUDIO_HTK
 MODULES += MODULE_AUDIO_OSS
 MODULES += MODULE_AUDIO_RAW
@@ -49,28 +53,38 @@ MODULES += MODULE_LM_ARPA
 MODULES += MODULE_LM_FSA
 MODULES += MODULE_LM_ZEROGRAM
 MODULES += MODULE_LM_FFNN
+ifneq ($(COMPILER),android)
 MODULES += MODULE_LM_TFRNN
+endif
 
 # ****** Math ******
 MODULES += MODULE_MATH_NR
 
 # ****** Mm ******
+ifneq ($(COMPILER),android)
 MODULES += MODULE_MM_BATCH
+endif
 MODULES += MODULE_MM_DT
 
 # ****** Neural Network ******
 MODULES += MODULE_NN
+ifneq ($(COMPILER),android)
 MODULES += MODULE_NN_SEQUENCE_TRAINING
 MODULES += MODULE_THEANO_INTERFACE
 MODULES += MODULE_PYTHON
+endif
 
 # ****** OpenFst ******
- MODULES += MODULE_OPENFST
+ifneq ($(COMPILER),android)
+MODULES += MODULE_OPENFST
+endif
 
 # ****** Search ******
- MODULES += MODULE_SEARCH_MBR
- MODULES += MODULE_SEARCH_WFST
+ifneq ($(COMPILER),android)
+MODULES += MODULE_SEARCH_MBR
+MODULES += MODULE_SEARCH_WFST
 MODULES += MODULE_SEARCH_LINEAR
+endif
 MODULES += MODULE_ADVANCED_TREE_SEARCH
 
 # ****** Signal ******
@@ -78,7 +92,9 @@ MODULES += MODULE_SIGNAL_GAMMATONE
 MODULES += MODULE_SIGNAL_PLP
 MODULES += MODULE_SIGNAL_VTLN
 MODULES += MODULE_SIGNAL_VOICEDNESS
+ifneq ($(COMPILER),android)
 MODULES += MODULE_SIGNAL_ADVANCED
+endif
 MODULES += MODULE_SIGNAL_ADVANCED_NR
 
 # ****** Speech ******
@@ -90,7 +106,9 @@ MODULES += MODULE_SPEECH_LATTICE_ALIGNMENT
 MODULES += MODULE_SPEECH_LATTICE_RESCORING
 
 # ****** Unit Tests ******
+ifneq ($(COMPILER),android)
 MODULES += MODULE_TEST
+endif
 
 # ****** Intel Threading Building Blocks ******
 # MODULES += MODULE_TBB
@@ -103,13 +121,16 @@ MODULES += MODULE_TEST
 # MODULES += MODULE_CUDA
 
 # Tensorflow integration
+ifneq ($(COMPILER),android)
 MODULES += MODULE_TENSORFLOW
+endif
 
 # define variables for the makefiles
 $(foreach module, $(MODULES), $(eval $(module) = 1))
 
 
 # ****** Tools ******
+ifneq ($(COMPILER),android)
 TOOLS += AcousticModelTrainer
 TOOLS += Archiver
 TOOLS += CorpusStatistics
@@ -118,15 +139,20 @@ TOOLS += FeatureStatistics
 TOOLS += Fsa
 TOOLS += SpeechRecognizer
 TOOLS += Xml
+endif
 
+ifneq ($(COMPILER),android)
 ifdef MODULE_CART
 TOOLS += Cart
 endif
+endif
 
+ifneq ($(COMPILER),android)
 ifdef MODULE_MM_DT
 ifdef MODULE_LATTICE_DT
 ifdef MODULE_SPEECH_DT
 TOOLS += LatticeProcessor
+endif
 endif
 endif
 endif
@@ -135,8 +161,10 @@ ifdef MODULE_FLF
 TOOLS += Flf
 endif
 
+ifneq ($(COMPILER),android)
 ifdef MODULE_NN
 TOOLS += NnTrainer
+endif
 endif
 
 # ****** Libraries ******
