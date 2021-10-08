@@ -17,37 +17,37 @@ import sys
 
 def zopen(fileName, mode = 'r'):
     if fileName == '-':
-	if mode == 'w' or mode == 'a':
-	    return sys.stdout
-	elif mode == 'r':
-	    return sys.stdin
-	else:
-	    raise IOError('stdio does not support mode "' + mode + '"')
+        if mode == 'w' or mode == 'a':
+            return sys.stdout
+        elif mode == 'r':
+            return sys.stdin
+        else:
+            raise IOError('stdio does not support mode "' + mode + '"')
     elif fileName == 'stdin':
-	if mode == 'r':
-	    return sys.stdin
-	else:
-	    raise IOError('stdin does not support mode "' + mode + '"')
+        if mode == 'r':
+            return sys.stdin
+        else:
+            raise IOError('stdin does not support mode "' + mode + '"')
     elif fileName == 'stdout':
-	if mode == 'w' or mode == 'a':
-	    return sys.stdout
-	else:
-	    raise IOError('stdout does not support mode "' + mode + '"')
+        if mode == 'w' or mode == 'a':
+            return sys.stdout
+        else:
+            raise IOError('stdout does not support mode "' + mode + '"')
     elif fileName == 'stderr':
-	if mode == 'w' or mode == 'a':
-	    return sys.stderr
-	else:
-	    raise IOError('stderr does not support mode "' + mode + '"')
+        if mode == 'w' or mode == 'a':
+            return sys.stderr
+        else:
+            raise IOError('stderr does not support mode "' + mode + '"')
     elif fileName == 'null' or fileName == 'nil':
-	return open('/dev/null', mode)
+        return open('/dev/null', mode)
     elif fileName.endswith('.gz'):
-	return gzip.open(fileName, mode)
+        return gzip.open(fileName, mode)
     else:
-	return open(fileName, mode)
+        return open(fileName, mode)
 
 def zclose(fd):
     if fd != sys.stdin and fd != sys.stdout and fd != sys.stderr:
-	fd.close()
+        fd.close()
 
 
 # universal unicode open:
@@ -55,28 +55,30 @@ def zclose(fd):
 # using the specified encoding and unicode is expected when
 # characters are written (and decoded using the specified encoding);
 # file type detection is supported (see zopen)
-def uopen(fileName, encoding = 'ascii', mode = 'r'):
+def uopen(fileName, encoding = 'utf-8', mode = 'r'):
     encoder, decoder, streamReader, streamWriter = codecs.lookup(encoding)
 
     fd = zopen(fileName, mode)
+    if fd in [sys.stdout, sys.stdin, sys.stderr]:
+        return fd
 
     if mode == 'w' or mode == 'a':
-	return streamWriter(fd)
+        return streamWriter(fd)
     elif mode == 'r':
-	return streamReader(fd)
+        return streamReader(fd)
     else:
-	return codecs.StreamReaderWriter(fd, streamReader, streamWriter)
+        return codecs.StreamReaderWriter(fd, streamReader, streamWriter)
 
 
-def uread(fileName, encoding = 'ascii'):
+def uread(fileName, encoding = 'utf-8'):
     return uopen(fileName, encoding, 'r')
 
 
-def uappend(fileName, encoding = 'ascii'):
+def uappend(fileName, encoding = 'utf-8'):
     return uopen(fileName, encoding, 'a')
 
 
-def uwrite(fileName, encoding = 'ascii'):
+def uwrite(fileName, encoding = 'utf-8'):
     return uopen(fileName, encoding, 'w')
 
 def uclose(fd):
