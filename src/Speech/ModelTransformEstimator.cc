@@ -17,7 +17,7 @@
 #include <Core/Directory.hh>
 #include <Core/MapParser.hh>
 #include <Mm/MixtureSet.hh>
-#if defined(MODULE_ADAPT_ADVANCED) && !defined(__ANDROID__)
+#ifdef MODULE_ADAPT_ADVANCED
 #include <Mm/BandMllrAdaptation.hh>
 #include <Mm/SemiTiedAdaptation.hh>
 #endif
