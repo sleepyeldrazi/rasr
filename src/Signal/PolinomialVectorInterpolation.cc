@@ -76,13 +76,18 @@ bool PolinomialVectorInterpolation::copyControlPoint(Time time, DataPointer& out
 }
 
 void PolinomialVectorInterpolation::resize() {
+#ifndef __ANDROID__ 
     verify(slidingWindow_.size() > 0);
 
     A_.resize(slidingWindow_.size(), slidingWindow_.size());
     B_.resize(slidingWindow_.size(), slidingWindow_.front()->size());
+#else 
+    defect();
+#endif
 }
 
 void PolinomialVectorInterpolation::calculateParameters() {
+#ifndef __ANDROID__
     verify(!equationSystemSolved_);
     resize();
     for (u32 row = 0; row < A_.nRows(); ++row) {
@@ -98,9 +103,13 @@ void PolinomialVectorInterpolation::calculateParameters() {
     if (getrf(A_, pivotIndices_) != 0 || getrs(A_, B_, pivotIndices_) != 0)
         defect();
     equationSystemSolved_ = true;
+#else
+    defect();
+#endif
 }
 
 bool PolinomialVectorInterpolation::calculateOutput(Time time, DataPointer& out) {
+#ifndef __ANDROID__
     verify(equationSystemSolved_);
 
     out = DataPointer(new Data);
@@ -113,6 +122,9 @@ bool PolinomialVectorInterpolation::calculateOutput(Time time, DataPointer& out)
         for (u32 dimension = 0; dimension < B_.nColumns(); ++dimension)
             (*out)[dimension] += B_(row, dimension) * pow(time, row);
     }
+#else
+    defect();
+#endif
     return true;
 }
 
