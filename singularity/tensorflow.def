@@ -4,10 +4,11 @@ Stage: tensorflow
 
 %post
     arch=$(uname -i)
+    if [ "$arch" -e 'aarch64'  ]; then arch='arm64'; fi
+
     echo "deb http://us.archive.ubuntu.com/ubuntu jammy universe" >> /etc/apt/sources.list
     
-    if [ "$arch" -e 'arm64'];
-    then
+    if [ "$arch" -e 'arm64' ]; then
         echo "deb http://ports.ubuntu.com/ubuntu-ports/ jammy universe" > /etc/apt/sources.list
     fi
     
@@ -18,8 +19,7 @@ Stage: tensorflow
 
     update-alternatives --install /usr/bin/python python /usr/bin/python3.10 1
 
-    if [ "$arch" -ne 'arm64'];
-    then    
+    if [ "$arch" -ne 'arm64']; then
         mkdir -p /opt/cuda/
         cd /opt/cuda
     
@@ -78,8 +78,7 @@ test:v2 --test_tag_filters=-benchmark-test,-no_oss,-no_gpu,-oss_serial,-v1only
 test:v2 --build_tag_filters=-benchmark-test,-no_oss,-no_gpu,-v1only
 EOF
 
-    if [ "$arch" -e 'arm64'];
-    then
+    if [ "$arch" -e 'arm64']; then
         cat << EOF > /opt/tensorflow/tensorflow/.tf_configure.bazelrc
 build --host_force_python=PY3
 build --python_path="/usr/bin/python3"
