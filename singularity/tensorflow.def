@@ -1,9 +1,16 @@
-Bootstrap: library
+Bootstrap: docker
 From: ubuntu:22.04
 Stage: tensorflow
 
 %post
+    arch=$(uname -i)
     echo "deb http://us.archive.ubuntu.com/ubuntu jammy universe" >> /etc/apt/sources.list
+    
+    if [ "$arch" -e 'arm64'];
+    then
+        echo "deb http://ports.ubuntu.com/ubuntu-ports/ jammy universe" >> /etc/apt/sources.list
+    fi
+    
     apt update -y
     apt upgrade -y
 
@@ -11,19 +18,22 @@ Stage: tensorflow
 
     update-alternatives --install /usr/bin/python python /usr/bin/python3.10 1
 
-    mkdir -p /opt/cuda/
-    cd /opt/cuda
-
-    wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_520.61.05_linux.run
-    wget https://developer.download.nvidia.com/compute/redist/cudnn/v8.6.0/local_installers/11.8/cudnn-linux-x86_64-8.6.0.163_cuda11-archive.tar.xz
-
-    sh cuda_11.8.0_520.61.05_linux.run --no-drm --silent --toolkit
-    tar xvf cudnn-linux-x86_64-8.6.0.163_cuda11-archive.tar.xz -C /usr/local/
-
-    mv /usr/local/cudnn-linux-x86_64-8.6.0.163_cuda11-archive/lib /usr/local/cuda/
-    mv /usr/local/cudnn-linux-x86_64-8.6.0.163_cuda11-archive/include/* /usr/local/cuda/include/
-
-    wget -O /usr/bin/bazel https://github.com/bazelbuild/bazel/releases/download/5.3.0/bazel-5.3.0-linux-x86_64
+    if [ "$arch" -ne 'arm64'];
+    then    
+        mkdir -p /opt/cuda/
+        cd /opt/cuda
+    
+        wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_520.61.05_linux.run
+        wget https://developer.download.nvidia.com/compute/redist/cudnn/v8.6.0/local_installers/11.8/cudnn-linux-x86_64-8.6.0.163_cuda11-archive.tar.xz
+    
+        sh cuda_11.8.0_520.61.05_linux.run --no-drm --silent --toolkit
+        tar xvf cudnn-linux-x86_64-8.6.0.163_cuda11-archive.tar.xz -C /usr/local/
+    
+        mv /usr/local/cudnn-linux-x86_64-8.6.0.163_cuda11-archive/lib /usr/local/cuda/
+        mv /usr/local/cudnn-linux-x86_64-8.6.0.163_cuda11-archive/include/* /usr/local/cuda/include/
+    fi
+    
+    wget -O /usr/bin/bazel https://github.com/bazelbuild/bazel/releases/download/5.3.0/bazel-5.3.0-linux-${arch}
     chmod +x /usr/bin/bazel
 
     mkdir -p /opt/tensorflow/
@@ -68,6 +78,39 @@ test:v2 --test_tag_filters=-benchmark-test,-no_oss,-no_gpu,-oss_serial,-v1only
 test:v2 --build_tag_filters=-benchmark-test,-no_oss,-no_gpu,-v1only
 EOF
 
+if [ "$arch" -e 'arm64'];
+    cat << EOF > /opt/tensorflow/tensorflow/.tf_configure.bazelrc
+build --host_force_python=PY3
+build --python_path="/usr/bin/python3"
+build:xla --define with_xla_support=true
+build --config=xla
+build --define no_aws_support=true
+build --define no_hdfs_support=true
+build --define framework_shared_object=true
+build --action_env TF_NEED_OPENCL_SYCL="0"
+build --action_env TF_NEED_ROCM="0"
+build --action_env TF_NEED_MKL="0"
+build --action_env TF_NEED_CUDA="0"
+build --action_env TF_DOWNLOAD_CLANG="0"
+build:v2 --define=tf_api_version=2
+build --action_env LD_LIBRARY_PATH="/.singularity.d/libs"
+build --action_env GCC_HOST_COMPILER_PATH="/usr/bin/arm64-linux-gnu-gcc-11"
+build:opt --copt=-Wno-sign-compare
+build:opt --host_copt=-Wno-sign-compare
+build:opt --copt=-march=native
+build:opt --host_copt=-march=native
+build:opt --cxxopt=-march=native
+build:opt --define with_default_optimizations=true
+test --flaky_test_attempts=3
+test --test_size_filters=small,medium
+test --test_env=LD_LIBRARY_PATH
+test:v1 --test_tag_filters=-benchmark-test,-no_oss,-no_gpu,-oss_serial
+test:v1 --build_tag_filters=-benchmark-test,-no_oss,-no_gpu
+test:v2 --test_tag_filters=-benchmark-test,-no_oss,-no_gpu,-oss_serial,-v1only
+test:v2 --build_tag_filters=-benchmark-test,-no_oss,-no_gpu,-v1only
+EOF
+fi
+
     mkdir -p /opt/tensorflow/bazel_out/
     cd /opt/tensorflow/tensorflow
     bazel --output_base=/opt/tensorflow/bazel_out build --config=opt --config=nogcp //tensorflow:libtensorflow_cc.so //tensorflow:libtensorflow.so
@@ -75,6 +118,7 @@ EOF
     #Cleanup
     rm -rf /opt/cuda
     rm -rf /opt/tensorflow/v2.12.0.tar.gz
-    find /opt/tensorflow/tensorflow/bazel-out/ -name "*.o" -exec rm {} \;
-    find /opt/tensorflow/tensorflow/bazel-out/ -name "*.lo" -exec rm {} \;
-    find /opt/tensorflow/tensorflow/bazel-out/ -name "*.a" -exec rm {} \;
+    find /opt/tensorflow/tensorflow/bazel-out/ -name "*.o" -exec rm -f {} \;
+    find /opt/tensorflow/tensorflow/bazel-out/ -name "*.lo" -exec rm -f {} \;
+    find /opt/tensorflow/tensorflow/bazel-out/ -name "*.a" -exec rm -f {} \;
+
