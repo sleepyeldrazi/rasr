@@ -6,10 +6,10 @@ Stage: tensorflow
     arch=$(uname -i)
     if [ "$arch" = "aarch64" ]; then arch='arm64'; fi
 
-    echo "deb http://us.archive.ubuntu.com/ubuntu jammy universe" >> /etc/apt/sources.list
-    
-    if [ "$arch" = 'arm64' ]; then
-        echo "deb http://ports.ubuntu.com/ubuntu-ports/ jammy universe" > /etc/apt/sources.list
+    if [ "$arch" != 'arm64' ]; then
+    	echo "deb http://us.archive.ubuntu.com/ubuntu jammy universe" >> /etc/apt/sources.list
+    else
+        echo "deb http://ports.ubuntu.com/ubuntu-ports/ jammy universe" >> /etc/apt/sources.list
     fi
     
     apt update -y
