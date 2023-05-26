@@ -8,7 +8,7 @@ Stage: tensorflow
     
     if [ "$arch" -e 'arm64'];
     then
-        echo "deb http://ports.ubuntu.com/ubuntu-ports/ jammy universe" >> /etc/apt/sources.list
+        echo "deb http://ports.ubuntu.com/ubuntu-ports/ jammy universe" > /etc/apt/sources.list
     fi
     
     apt update -y
@@ -115,7 +115,7 @@ EOF
 
     mkdir -p /opt/tensorflow/bazel_out/
     cd /opt/tensorflow/tensorflow
-    #bazel --output_base=/opt/tensorflow/bazel_out build --config=opt --config=nogcp //tensorflow:libtensorflow_cc.so //tensorflow:libtensorflow.so
+    bazel --output_base=/opt/tensorflow/bazel_out build --config=opt --config=nogcp //tensorflow:libtensorflow_cc.so //tensorflow:libtensorflow.so
 
     #Cleanup
     rm -rf /opt/cuda
