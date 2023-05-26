@@ -78,8 +78,9 @@ test:v2 --test_tag_filters=-benchmark-test,-no_oss,-no_gpu,-oss_serial,-v1only
 test:v2 --build_tag_filters=-benchmark-test,-no_oss,-no_gpu,-v1only
 EOF
 
-if [ "$arch" -e 'arm64'];
-    cat << EOF > /opt/tensorflow/tensorflow/.tf_configure.bazelrc
+    if [ "$arch" -e 'arm64'];
+    then
+        cat << EOF > /opt/tensorflow/tensorflow/.tf_configure.bazelrc
 build --host_force_python=PY3
 build --python_path="/usr/bin/python3"
 build:xla --define with_xla_support=true
@@ -109,11 +110,12 @@ test:v1 --build_tag_filters=-benchmark-test,-no_oss,-no_gpu
 test:v2 --test_tag_filters=-benchmark-test,-no_oss,-no_gpu,-oss_serial,-v1only
 test:v2 --build_tag_filters=-benchmark-test,-no_oss,-no_gpu,-v1only
 EOF
-fi
+
+    fi
 
     mkdir -p /opt/tensorflow/bazel_out/
     cd /opt/tensorflow/tensorflow
-    bazel --output_base=/opt/tensorflow/bazel_out build --config=opt --config=nogcp //tensorflow:libtensorflow_cc.so //tensorflow:libtensorflow.so
+    #bazel --output_base=/opt/tensorflow/bazel_out build --config=opt --config=nogcp //tensorflow:libtensorflow_cc.so //tensorflow:libtensorflow.so
 
     #Cleanup
     rm -rf /opt/cuda
